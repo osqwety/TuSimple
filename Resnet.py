@@ -154,7 +154,7 @@ def predict(model, image_path):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = cv2.resize(image, (224, 224))
     image_tensor = torch.tensor(image, dtype=torch.float32).permute(2, 0, 1) / 255.0
-    image_tensor = image_tensor.unsqueeze(0).to("cuda")
+    image_tensor = image_tensor.unsqueeze(0).to("cpu")
     with torch.inference_mode():
         output = model(image_tensor)
         mask = torch.sigmoid(output).cpu().numpy()[0, 0]
@@ -241,8 +241,8 @@ dataloader = DataLoader(dataset, batch_size=8, shuffle=True)
 
 #train(model, data=dataloader, lossfn=loss_fn, optimizer=optimizer, epochs=epochs)
 #Example Prsediction
-pred_mask = predict(model, r"C:\Users\lambo\Desktop\archive\TUSimple\test_set\clips\0531\1492626272918083058\20.jpg")
+#pred_mask = predict(model, r"C:\Users\lambo\Desktop\archive\TUSimple\test_set\clips\0531\1492626272918083058\20.jpg")
 print(f"Predicted Mask Shape: {pred_mask.shape}")
 pred_mask = pred_mask.squeeze(0)
-cv2.imwrite(r"C:\Users\lambo\Desktop\archive\TUSimple\predicted_mask.jpg", pred_mask)
+#cv2.imwrite(r"C:\Users\lambo\Desktop\archive\TUSimple\predicted_mask.jpg", pred_mask)
 process_video("input_video.mp4", "output_video.mp4")
