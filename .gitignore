@@ -1,0 +1,11 @@
+frames/
+lane-masks/
+test_set/
+train_set/
+test_label.json
+conver.py
+convert.py
+clean.py
+generate_seg_tusimple.py
+__pycache__/
+output_video.mp4
