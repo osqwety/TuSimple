@@ -3,7 +3,6 @@ import torch.nn as nn
 import os
 import cv2
 import numpy as np
-import torch
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
@@ -117,12 +116,6 @@ class TuSimpleLaneDataset(Dataset):
 
         return image, mask
 
-def ResNet50(img_channels=3, num_classes=1):
-    return ResNet(block, [3, 4, 6, 3], img_channels, num_classes)
-
-def ResNet101(img_channels=3, num_classes=1):
-    return ResNet(block, [3, 4, 23, 3], img_channels, num_classes)
-
 def ResNet152(img_channels=3, num_classes=1):
     return ResNet(block, [3, 8, 36, 3], img_channels, num_classes)
 
@@ -134,6 +127,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 epochs = 1000
 
 def train(model, data, lossfn, optimizer, epochs):
+    
     model.train()
     for epoch in range(epochs):
         for images, masks in data:
@@ -149,6 +143,7 @@ def train(model, data, lossfn, optimizer, epochs):
     torch.save(model.state_dict(), r"C:\Users\lambo\Desktop\archive\TUSimple\resnet152_V3.pth")
 
 def predict(model, image_path):
+
     model.eval()
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -241,7 +236,7 @@ dataloader = DataLoader(dataset, batch_size=8, shuffle=True)
 
 #train(model, data=dataloader, lossfn=loss_fn, optimizer=optimizer, epochs=epochs)
 #Example Prsediction
-#pred_mask = predict(model, r"C:\Users\lambo\Desktop\archive\TUSimple\test_set\clips\0531\1492626272918083058\20.jpg")
+pred_mask = predict(model, r"C:\Users\lambo\Desktop\archive\TUSimple\test_set\clips\0531\1492626272918083058\20.jpg")
 print(f"Predicted Mask Shape: {pred_mask.shape}")
 pred_mask = pred_mask.squeeze(0)
 #cv2.imwrite(r"C:\Users\lambo\Desktop\archive\TUSimple\predicted_mask.jpg", pred_mask)
